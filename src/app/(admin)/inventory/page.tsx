@@ -77,14 +77,6 @@ export default function InventoryPage() {
     }
   })
 
-  const {mutate: updateProd} = useMutation({
-    mutationKey: ['updateProductMutation'],
-    mutationFn: ({company, companyId}:{product: any, productId: string}) => updateCompany(company, companyId),
-    onSuccess: () => {
-      refetch()
-    }
-  })
-
   const {mutate: deleteProd} = useMutation({
     mutationKey: ['deleteProductMutation'],
     mutationFn: (productId:number) => deleteProduct(productId),
@@ -99,11 +91,6 @@ export default function InventoryPage() {
   })
   // -----------------------------
 
-  const editProduct = (record: any) => {
-    setIsEdit(true)
-    formInstance.setFieldsValue(record)
-    setOpenModal(true)
-  }
 
   const removeProduct = (record: any) => {
     deleteProd(record.code)
@@ -112,16 +99,8 @@ export default function InventoryPage() {
 
 
   const onFinish = (values: any) => {
-    if (isEdit) {
-      updateProd(
-        {
-          product: values,
-          productId: values.code
-        }
-      )
-    } else {
+
       createNewProduct(values)
-    }
     formInstance.resetFields()
     setOpenModal(false)
   }
