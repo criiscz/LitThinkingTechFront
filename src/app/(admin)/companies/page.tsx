@@ -1,16 +1,15 @@
 'use client'
-import SearchField from "@/app/(admin)/components/SearchField";
 import {Button, Form, Input, Modal, Table} from "antd";
 import {useTranslations} from "next-intl";
-import Search from "antd/es/input/Search";
-import {DeleteFilled, EditFilled, PlusCircleFilled} from "@ant-design/icons";
-import {useState} from "react";
+import {DeleteFilled, EditFilled} from "@ant-design/icons";
+import {useEffect, useState} from "react";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import GeneralView from "@/app/(admin)/components/GeneralView";
 import {createCompany, deleteCompany, getCompanies, updateCompany} from "@/api/CompanyAPI";
 
 export default function DashboardPage() {
   const t = useTranslations('general');
+
 
   const [openModal, setOpenModal] = useState(false);
   const columns = [

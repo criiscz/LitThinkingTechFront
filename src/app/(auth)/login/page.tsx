@@ -1,22 +1,11 @@
 'use client'
 import {Button, Form, Input} from "antd";
-import {signIn} from 'next-auth/react';
-import {useRouter} from "next/navigation";
+import {handleSignIn} from "@/app/lib/cognitoActions";
 
 export default function Page(){
-    const router = useRouter()
 
     const handleLogin = async (values:any) => {
-        const response = await signIn('credentials', {
-            redirect: false,
-            email: values.mail,
-            password: values.password
-        })
-        if(response!.ok){
-            router.push('/company')
-        } else {
-            console.log('Login failed')
-        }
+       handleSignIn(values.mail, values.password)
     }
 
     return(

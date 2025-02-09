@@ -16,7 +16,18 @@ interface GeneralViewProps {
 }
 
 export default function GeneralView(
-  {buttonAddLabel, tableColumns, tableData, openModal, onOk, onCancel, form, onAdd, pagination, setPagination}: GeneralViewProps
+  {
+    buttonAddLabel,
+    tableColumns,
+    tableData,
+    openModal,
+    onOk,
+    onCancel,
+    form,
+    onAdd,
+    pagination,
+    setPagination
+  }: GeneralViewProps
 ) {
   return (
     <div className={'flex flex-col gap-10 mt-5'}>
@@ -28,10 +39,15 @@ export default function GeneralView(
         <Table columns={tableColumns} dataSource={tableData} pagination={{
           ...pagination,
           showSizeChanger: true,
-          onChange: (page: number, pageSize: number) => setPagination({current: page-1, pageSize: pageSize})
+          onChange: (page: number, pageSize: number) => setPagination({current: page - 1, pageSize: pageSize})
         }}/>
       </section>
-      <Modal open={openModal} title="Basic Modal" onClose={(() => onCancel())} destroyOnClose={true} footer={null}>
+      <Modal
+        open={openModal}
+        title="Basic Modal"
+        onCancel={() => onCancel()}
+        destroyOnClose={true}
+        footer={null}>
         {form}
       </Modal>
     </div>

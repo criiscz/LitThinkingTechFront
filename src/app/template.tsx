@@ -30,9 +30,9 @@ export default function Template({children}: { children: ReactNode }) {
   const items: MenuItem[] = [
     getItem('Empresas', '1', <DashboardOutlined/>),
     getItem('Inventario', '2', <SettingOutlined/>),
-    getItem('Ordenes', '3', <SettingOutlined/>),
-    getItem('Clientes', '4', <SettingOutlined/>),
-    getItem('Usuarios', '5', <SettingOutlined/>),
+    getItem('Ordenes (No funcional)', '3', <SettingOutlined/>),
+    getItem('Clientes (No funcional)', '4', <SettingOutlined/>),
+    getItem('Usuarios (No funcional)', '5', <SettingOutlined/>),
   ]
 
   const [selectedKeys, setSelectedKeys] = useState(['1']);

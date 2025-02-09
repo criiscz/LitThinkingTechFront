@@ -1,5 +1,6 @@
 import type {Metadata} from "next";
 import "./globals.css";
+import '@/utils/aws/Amplify';
 
 import {NextIntlClientProvider} from 'next-intl';
 import {getLocale, getMessages} from 'next-intl/server';
@@ -7,7 +8,7 @@ import React from "react";
 import React19Compatability from "@/app/components/React19Compatability";
 import ReactQueryProvider from "@/app/components/ReactQueryProvider";
 import {getServerSession} from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import ConfigureAmplifyClientSide from "@/utils/aws/Amplify";
 
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export default async function RootLayout({
                                          }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession();
+  // const session = await getServerSession();
   const locale = await getLocale();
 
   const messages = await getMessages();
@@ -30,6 +31,7 @@ export default async function RootLayout({
     <html lang={locale}>
       <body>
       <React19Compatability/>
+      <ConfigureAmplifyClientSide/>
       <ReactQueryProvider>
         <NextIntlClientProvider messages={messages}>
           {children}
