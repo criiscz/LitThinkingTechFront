@@ -6,13 +6,15 @@ import {DeleteFilled, EditFilled} from "@ant-design/icons";
 import {createCognitoUser, deleteUser, getUsers} from "@/app/services/cognitoActions";
 import {useQuery} from "@tanstack/react-query";
 import useAuthUser from "@/app/hooks/useAuthUser";
+import {useTranslations} from "next-intl";
 
 
 export default function UsersPage() {
   const user = useAuthUser();
+  const t = useTranslations();
   const columns = [
     {
-      title: 'User ID',
+      title: t('userId'),
       key: 'userID',
       render: (text: any, record: any) => (
         <>
@@ -21,7 +23,7 @@ export default function UsersPage() {
       )
     },
     {
-      title: 'Name',
+      title: t('name'),
       key: 'name',
       render: (text: any, record: any) => (
         <>
@@ -30,7 +32,7 @@ export default function UsersPage() {
       )
     },
     {
-      title: 'Email',
+      title: t('email'),
       key: 'email',
       render: (text: any, record: any) => (
         <>
@@ -39,7 +41,7 @@ export default function UsersPage() {
       )
     },
     {
-      title: 'Role',
+      title: t('role'),
       key: 'role',
       render: (text: any, record: any) => (
         <>
@@ -48,25 +50,24 @@ export default function UsersPage() {
       )
     },
     {
-      title: 'Action',
+      title: t('action'),
       key: 'action',
       render: (text: any, record: any) => (
         <>
           {
             (user && user.username !== record.Username) &&
-            <Button icon={<DeleteFilled/>} type="primary" danger onClick={() => handleDeleteUser(record)}>Delete</Button>
+            <Button icon={<DeleteFilled/>} type="primary" danger onClick={() => handleDeleteUser(record)}>{t('delete')}</Button>
           }</>
       )
     },
   ];
 
   const handleDeleteUser = (record: any) => {
-    console.log('delete', record)
     deleteUser(record.Username).then(r => refetch())
   }
 
   const createUser = (fields: any) => {
-    createCognitoUser(fields.email, fields.name, fields.role).then(r => console.log(r)).then(r => refetch())
+    createCognitoUser(fields.email, fields.name, fields.role, fields.password).then(r => console.log(r)).then(r => refetch())
 
   }
 
@@ -75,42 +76,40 @@ export default function UsersPage() {
     queryFn: getUsers
   });
 
-  useEffect(() => {
-    console.log(users)
-  }, [users]);
-
   const [formInstance] = Form.useForm();
 
 
   const onFinish = (fields: any) => {
-    console.log('Received values:', fields);
     createUser(fields)
   }
 
   const [openModal, setOpenModal] = useState(false);
   const form: React.ReactNode = (
     <Form onFinish={onFinish} form={formInstance}>
-      <Form.Item label="Name" name={"name"}>
+      <Form.Item label={t('name')} name={"name"}>
         <Input/>
       </Form.Item>
-      <Form.Item label="Email" name={"email"}>
+      <Form.Item label={t('email')} name={"email"}>
         <Input/>
       </Form.Item>
-      <Form.Item label="Role" name={"role"}>
+      <Form.Item label={t('password')} name={"password"}>
+        <Input.Password/>
+      </Form.Item>
+      <Form.Item label={t('role')} name={"role"}>
         <Select>
-          <Select.Option value="ADMIN">Admin</Select.Option>
-          <Select.Option value="EXTERNAL">External</Select.Option>
+          <Select.Option value="ADMIN">{t('admin')}</Select.Option>
+          <Select.Option value="EXTERNAL">{t('external')}</Select.Option>
         </Select>
       </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit">Submit</Button>
+        <Button type="primary" htmlType="submit">{t('submit')}</Button>
       </Form.Item>
     </Form>
   )
 
 
   return (
-    <GeneralView buttonAddLabel={'Add User'}
+    <GeneralView buttonAddLabel={t('addUser')}
                  tableColumns={columns}
                  tableData={users && users.Users as any}
                  openModal={openModal}

@@ -9,41 +9,45 @@ import {createCompany, deleteCompany, getCompanies, updateCompany} from "@/api/C
 import useAuthUser from "@/app/hooks/useAuthUser";
 
 export default function DashboardPage() {
-  const t = useTranslations('general');
+  const t = useTranslations();
 
   const user = useAuthUser();
 
   const [openModal, setOpenModal] = useState(false);
   const columns = [
     {
-      title: 'NIT',
+      title: t('NIT'),
       dataIndex: 'NIT',
       key: 'nit',
     },
     {
-      title: 'Name',
+      title: t('name'),
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'Address',
+      title: t('address'),
       dataIndex: 'address',
       key: 'address',
     },
     {
-      title: 'Phone',
+      title: t('phone'),
       dataIndex: 'phone',
       key: 'phone',
     },
     {
-      title: 'Action',
+      title: t('action'),
       key: 'action',
-      render: (text: any, record: any) => (
-        <>
-          <Button icon={<EditFilled/>} type="primary" onClick={() => editCompany(record)}>Edit</Button>
-          <Button icon={<DeleteFilled/>} type="primary" danger onClick={() => removeCompany(record)} >Delete</Button>
-        </>
-      )
+      render: (text: any, record: any) => {
+        if (user && user.isAdmin) {
+          return (
+            <>
+              <Button icon={<EditFilled/>} type="primary" onClick={() => editCompany(record)}>{t('edit')}</Button>
+              <Button icon={<DeleteFilled/>} type="primary" danger onClick={() => removeCompany(record)}>{t('delete')}</Button>
+            </>
+          )
+        }
+      }
     },
   ];
 
@@ -110,34 +114,34 @@ export default function DashboardPage() {
       <Form.Item
         label="NIT"
         name="NIT"
-        rules={[{required: true, message: 'Please input the NIT!'}]}
+        rules={[{required: true, message: t('pleaseInputNIT')}]}
       >
         <Input disabled={isEdit}/>
       </Form.Item>
       <Form.Item
-        label="Name"
+        label={t('name')}
         name="name"
-        rules={[{required: true, message: 'Please input the name!'}]}
+        rules={[{required: true, message: t('pleaseInputName')}]}
       >
         <Input/>
       </Form.Item>
       <Form.Item
         label="Address"
-        name="address"
-        rules={[{required: true, message: 'Please input the address!'}]}
+        name={t('address')}
+        rules={[{required: true, message: t('pleaseInputAddress')}]}
       >
         <Input/>
       </Form.Item>
       <Form.Item
         label="Phone"
-        name="phone"
-        rules={[{required: true, message: 'Please input the phone!'}]}
+        name={t('phone')}
+        rules={[{required: true, message: t('pleaseInputPhone')}]}
       >
         <Input/>
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
-          Submit
+          {t('submit')}
         </Button>
       </Form.Item>
     </Form>
@@ -145,7 +149,7 @@ export default function DashboardPage() {
 
   return (
     <GeneralView
-      buttonAddLabel={'Add Company'}
+      buttonAddLabel={t('addCompany')}
       tableColumns={columns}
       tableData={data && data}
       pagination={pagination}

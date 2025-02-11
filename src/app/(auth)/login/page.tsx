@@ -3,6 +3,7 @@ import {Button, Form, Input} from "antd";
 import {handleSignIn} from "@/app/lib/cognitoActions";
 import {useRouter} from "next/navigation";
 import {message} from "antd";
+import {useTranslations} from "next-intl";
 
 export default function Page() {
 
@@ -18,9 +19,11 @@ export default function Page() {
     router.push('/dashboard')
   }
 
+  const t = useTranslations();
+
   return (
-    <div className={'flex flex-col items-center justify-center h-dvh'}>
-      <div className={'flex w-1/5 bg-blue-50 h-1/2 rounded shadow-2xl flex-col items-center justify-center gap-3'}>
+    <div className={'flex flex-col items-center justify-center h-dvh bg-gray-900'}>
+      <div className={'flex w-1/5 bg-white h-1/2 rounded shadow-2xl flex-col items-center justify-center gap-3'}>
         <h1 className={'text-2xl font-bold mb-10'}>Login</h1>
         <Form
           onFinish={async (values) => {
@@ -32,13 +35,13 @@ export default function Page() {
         >
           <Form.Item
             name="mail"
-            rules={[{required: true, message: 'Please input your email!'}]}
+            rules={[{required: true, message: t('pleaseInputEmail')}]}
           >
             <Input type="text" placeholder={"Email"} style={{padding: '0.5rem',}}/>
           </Form.Item>
           <Form.Item
             name="password"
-            rules={[{required: true, message: 'Please input your password!'}]}
+            rules={[{required: true, message: t('pleaseInputPassword')}]}
           >
             <Input.Password placeholder={"Password"} style={{padding: '0.5rem'}}/>
           </Form.Item>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectSettingsService">
+    <option name="localesDirectory" value="C:\Users\crist\lite-thinking-tech-front-end\messages" />
+    <option name="folderStrategy" value="MODULARIZED_NAMESPACE" />
+    <option name="filePattern" value="*.json" />
+    <option name="defaultNamespace" value="" />
+    <option name="nestedKeys" value="false" />
+  </component>
+</project>

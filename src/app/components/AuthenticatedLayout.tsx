@@ -4,10 +4,20 @@ import Sider from "antd/es/layout/Sider";
 import {Avatar, Breadcrumb, Layout, Menu, MenuProps, Modal} from "antd";
 import {DashboardOutlined, SettingOutlined} from "@ant-design/icons";
 import {Content, Footer} from "antd/es/layout/layout";
-import {useState} from "react";
+import React, {useState} from "react";
 import {useRouter} from "next/navigation";
 import UserPanel from "@/app/components/UserPanel";
 import useAuthUser from "@/app/hooks/useAuthUser";
+import {useTranslations} from "next-intl";
+import {
+  RiBillLine,
+  RiBookShelfLine,
+  RiBuilding2Line,
+  RiGroup3Line,
+  RiListCheck, RiUser2Fill, RiUserLine,
+  RiUserSmileLine
+} from "@remixicon/react";
+import LocaleChanger from "@/app/components/LocaleChanger";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -31,22 +41,23 @@ export default function AuthenticatedLayout({children}: { children: React.ReactN
   const [collapsed, setCollapsed] = useState(false);
   const router = useRouter();
   const user = useAuthUser();
+  const t = useTranslations();
 
   const itemsAdmin: MenuItem[] = [
-    getItem('Empresas', '1', <DashboardOutlined/>),
-    getItem('Categorias', '2', <SettingOutlined/>),
-    getItem('Inventario', '3', <SettingOutlined/>),
-    getItem('Ordenes (No funcional)', '4', <SettingOutlined/>),
-    getItem('Clientes (No funcional)', '5', <SettingOutlined/>),
-    getItem('Usuarios', '6', <SettingOutlined/>),
+    getItem(t('companies'), '1', <RiBuilding2Line/>),
+    getItem(t('categories'), '2', <RiBookShelfLine/>),
+    getItem(t('inventory'), '3', <RiListCheck/>),
+    getItem(t('orders'), '4', <RiBillLine/>),
+    getItem(t('clients'), '5', <RiUserSmileLine/>),
+    getItem(t('users'), '6', <RiGroup3Line/>),
   ]
 
   const items: MenuItem[] = [
-    getItem('Empresas', '1', <DashboardOutlined/>),
-    getItem('Categorias', '2', <SettingOutlined/>),
-    getItem('Inventario', '3', <SettingOutlined/>),
-    getItem('Ordenes (No funcional)', '4', <SettingOutlined/>),
-    getItem('Clientes (No funcional)', '5', <SettingOutlined/>),
+    getItem(t('companies'), '1', <RiBuilding2Line/>),
+    getItem(t('categories'), '2', <RiBookShelfLine/>),
+    getItem(t('inventory'), '3', <RiListCheck/>),
+    getItem(t('orders'), '4', <RiBillLine/>),
+    getItem(t('clients'), '5', <RiUserSmileLine/>),
   ]
 
   const [selectedKeys, setSelectedKeys] = useState(['1']);
@@ -93,7 +104,7 @@ export default function AuthenticatedLayout({children}: { children: React.ReactN
           }/>
           <div onClick={() => setOpenModal(true)}
                className="bg-gray-700 h-10 rounded-lg pb-8 pt-8 m-3 mt-5 mb-10 flex items-center justify-center gap-3 cursor-pointer hover:bg-gray-500 active:bg-gray-400">
-            <Avatar size={32} icon={<SettingOutlined/>}/>
+            <Avatar size={32} icon={<RiUserLine/>}/>
             {!collapsed && <p className={'text-center text-white'}>{user && user.name}</p>}
           </div>
         </div>
@@ -117,10 +128,14 @@ export default function AuthenticatedLayout({children}: { children: React.ReactN
             {children}
           </div>
         </Content>
-        <Footer style={{textAlign: 'center'}}>Lite Thiking - Tech Test |2025| Created by criiscz</Footer>
+        <Footer style={{textAlign: 'center'}}>Lite Thinking - Tech Test |2025| Created by criiscz</Footer>
       </Layout>
-      <Modal open={openModal} title="User Modal" onOk={() => setOpenModal(false)} onCancel={() => setOpenModal(false)}>
-        <UserPanel/>
+      <Modal open={openModal} title={t('userModal')} onOk={() => setOpenModal(false)} onCancel={() => setOpenModal(false)}
+             footer={null}>
+        <div className={'flex flex-col justify-evenly gap-10'}>
+          <LocaleChanger/>
+          <UserPanel/>
+        </div>
       </Modal>
     </Layout>
   )

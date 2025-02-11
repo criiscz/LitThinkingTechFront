@@ -1,11 +1,11 @@
 import {
-  CognitoIdentityProviderClient,
-  AdminCreateUserCommand,
-  AdminSetUserPasswordCommand,
   AdminAddUserToGroupCommand,
+  AdminCreateUserCommand,
+  AdminDeleteUserCommand,
+  AdminSetUserPasswordCommand,
+  CognitoIdentityProviderClient,
   CognitoIdentityProviderClientConfig,
-  ListUsersCommand,
-  AdminDeleteUserCommand
+  ListUsersCommand
 } from '@aws-sdk/client-cognito-identity-provider';
 
 console.log('keyId: ', process.env._AWS_ACCESS_KEY_ID);
@@ -22,7 +22,8 @@ const client = new CognitoIdentityProviderClient(config);
 export const createCognitoUser = async (
   email: string,
   name: string,
-  role: string
+  role: string,
+  password: string
 ) => {
   try {
     const command = new AdminCreateUserCommand({
@@ -52,12 +53,11 @@ export const createCognitoUser = async (
       ],
     });
     const response = await client.send(command);
-    console.log('User created: ', response);
 
     const setPasswordCommand = new AdminSetUserPasswordCommand({
       UserPoolId: process.env.NEXT_PUBLIC_USER_POOL_ID,
       Username: email,
-      Password: 'PasswordPrueba123!',
+      Password: password,
       Permanent: true,
     });
     await client.send(setPasswordCommand);
@@ -74,13 +74,10 @@ export const createCognitoUser = async (
 }
 
 export const getUsers = async () => {
-  console.log('traer user')
   const command = new ListUsersCommand({
     UserPoolId: process.env.NEXT_PUBLIC_USER_POOL_ID,
   });
-  const response = await client.send(command);
-  console.log('Users: ', response);
-  return response;
+  return await client.send(command);
 }
 
 export const deleteUser = async (username: string) => {
@@ -88,8 +85,6 @@ export const deleteUser = async (username: string) => {
     UserPoolId: process.env.NEXT_PUBLIC_USER_POOL_ID,
     Username: username,
   });
-  console.log('username: ', username);
   const response = await client.send(command);
-  console.log('User deleted: ', response);
   return response;
 }

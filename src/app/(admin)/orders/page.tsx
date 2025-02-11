@@ -8,33 +8,33 @@ import {createOrder, getOrders} from "@/api/OrderAPI";
 import useAuthUser from "@/app/hooks/useAuthUser";
 import {getClients} from "@/api/ClientAPI";
 import {getProducts} from "@/api/ProductAPI";
+import {useTranslations} from "next-intl";
 
 export default function OrdersPage() {
 
   const [pagination, setPagination] = useState({current: 1, pageSize: 5})
+  const t = useTranslations();
 
   const columns = [
     {
-      title: 'Order Id',
+      title: t('orderID'),
       dataIndex: 'id',
       key: 'orderID',
     },
     {
-      title: 'Client ID',
+      title: t('clientID'),
       key: 'clientID',
       render: (text: any, record: any) => (
         <Tag color={'blue'}>{record.client.id +"-"+ record.client.name}</Tag>
       )
     },
     {
-      title: 'Products',
+      title: t('products'),
       key: 'productID',
       render: (text: any, record: any) =>
         {
-          console.log('recorda', record);
           return record.productList.map((prod: any) => {
             const product = products && products.find((p: any) => p.code === prod.productId);
-            console.log('prodd', prod);
             return (
               <Tag color={'green'}>{product && prod.quantity + " " + product.name + ": $" + prod.price}</Tag>
             )
@@ -43,7 +43,7 @@ export default function OrdersPage() {
 
     },
     {
-      title: 'Total',
+      title: t('total'),
       key: 'total',
       render: (text: any, record: any) => (
         <span>${record.productList.reduce((acc: number, prod: any) => acc + prod.quantity * prod.price, 0)}</span>
@@ -76,13 +76,13 @@ export default function OrdersPage() {
     } as any;
     createNewOrder(order).then((res) => {
       if (res.error) {
-        notification.error({message: 'Error creating order!'});
+        notification.error({message: t('errorCreatingOrder')});
         return;
       }
       formInstance.resetFields();
       refetch();
       setOpenModal(false);
-      notification.success({message: 'Order created successfully!'});
+      notification.success({message: t('orderCreated')});
     });
   }
 
@@ -110,9 +110,9 @@ export default function OrdersPage() {
   const form: React.ReactNode = (
     <Form form={formInstance} onFinish={onSubmit} layout={'vertical'}>
       <Form.Item
-        label="Client ID"
+        label={t('clientID')}
         name="clientId"
-        rules={[{required: true, message: 'Please input the Order Id!'}]}
+        rules={[{required: true, message: t('pleaseInputClientID')}]}
       >
         <Select>
           {
@@ -123,9 +123,9 @@ export default function OrdersPage() {
         </Select>
       </Form.Item>
       <Form.Item
-        label="Products"
+        label={t('products')}
         name="productsId"
-        rules={[{required: true, message: 'Please input the Product Id!'}]}
+        rules={[{required: true, message: t('pleaseInputProducts')}]}
       >
         <Select
           mode="multiple"
@@ -152,7 +152,7 @@ export default function OrdersPage() {
 
   return (
     <>
-      <GeneralView buttonAddLabel={'Add Order'}
+      <GeneralView buttonAddLabel={t('addOrder')}
                    tableColumns={columns}
                    tableData={data && data}
                    openModal={false}
@@ -167,7 +167,7 @@ export default function OrdersPage() {
                    form={null}
       />
       <Drawer
-        title="Add Order"
+        title={t('createOrder')}
         open={openModal}
         footer={null}
         onClose={() => setOpenModal(false)}
@@ -177,31 +177,31 @@ export default function OrdersPage() {
         <div className={'flex flex-col justify-between gap-3 h-full'}>
           {form}
           <div className={'flex flex-col gap-3'}>
-            <h2 className={'font-bold text-xl'}>Products to create the order</h2>
+            <h2 className={'font-bold text-xl'}>{t('productsToCreateOrder')}</h2>
             <Table
               columns={[
                 {
-                  title: 'Product ID',
+                  title: t('code'),
                   dataIndex: 'code',
                   key: 'code',
                 },
                 {
-                  title: 'Name',
+                  title: t('name'),
                   dataIndex: 'name',
                   key: 'name',
                 },
                 {
-                  title: 'Quantity',
+                  title: t('quantity'),
                   dataIndex: 'quantity',
                   key: 'quantity',
                 },
                 {
-                  title: 'Price',
+                  title: t('price'),
                   dataIndex: 'price',
                   key: 'price',
                 },
                 {
-                  title: 'Total',
+                  title: t('total'),
                   key: 'total',
                   render: (text: any, record: any) => (
                     <span>${record.quantity * record.price}</span>
@@ -224,25 +224,25 @@ export default function OrdersPage() {
             />
             <h3 className={'font-bold text-xl'}>Total:
               ${productsToAdd.reduce((acc: number, product: any) => acc + product.quantity * product.price, 0)}</h3>
-            <Button type={'primary'} onClick={() => formInstance.submit()}>Create Order</Button>
+            <Button type={'primary'} onClick={() => formInstance.submit()}>{t('createOrder')}</Button>
           </div>
         </div>
         <Modal
-          title={'Add Product to Order'}
+          title={t('addProductToOrder')}
           open={openAddProductToOrder}
           footer={null}
         >
           {/*<h3>Adding Product to Order: {products && products.data && products.data.find((product:any) => product.code === selectedProduct.code) || ''}</h3>*/}
           <Form onFinish={addQuantity} layout={'vertical'}>
             <Form.Item
-              label="Quantity"
+              label={t('quantity')}
               name="quantity"
-              rules={[{required: true, message: 'Please input the quantity!'}]}
+              rules={[{required: true, message: t('pleaseInputQuantity')}]}
             >
               <Input type={'number'} max={selectedProduct.stock}/>
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit" loading={isCreating}>Submit</Button>
+              <Button type="primary" htmlType="submit" loading={isCreating}>{t('submit')}</Button>
             </Form.Item>
           </Form>
         </Modal>

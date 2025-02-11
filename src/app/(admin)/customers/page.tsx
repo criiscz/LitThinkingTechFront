@@ -6,34 +6,27 @@ import {DeleteFilled, EditFilled} from "@ant-design/icons";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import {createClient, getClients} from "@/api/ClientAPI";
 import useAuthUser from "@/app/hooks/useAuthUser";
+import {useTranslations} from "next-intl";
 
 export default function CustomersPage() {
+  const t = useTranslations();
+
   const columns = [
     {
-      title: 'Customer ID',
+      title: t('customerId'),
       dataIndex: 'id',
       key: 'customerID',
     },
     {
-      title: 'Name',
+      title: t('name'),
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'Phone',
+      title: t('phone'),
       dataIndex: 'phone',
       key: 'phone',
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (text: any, record: any) => (
-        <>
-          <Button icon={<EditFilled/>} type="primary" onClick={() => setOpenModal(true)}>Edit</Button>
-          <Button icon={<DeleteFilled/>} type="primary" danger>Delete</Button>
-        </>
-      )
-    },
+    }
   ];
 
   const [pagination, setPagination] = useState({current: 1, pageSize: 10})
@@ -61,8 +54,8 @@ export default function CustomersPage() {
         return;
       }
       notification.success({
-        message: 'Success',
-        description: 'Client created successfully',
+        message: t('success'),
+        description: t('clientCreated'),
       });
       refetch();
       setOpenModal(false);
@@ -70,7 +63,7 @@ export default function CustomersPage() {
     }).catch(() => {
       notification.error({
         message: 'Error',
-        description: 'Error creating client',
+        description: t('errorCreatingClient'),
       });
     });
   }
@@ -78,29 +71,29 @@ export default function CustomersPage() {
   const form: React.ReactNode = (
     <Form onFinish={handleFinish}>
       <Form.Item
-        label="Id"
+        label={t('id')}
         name="id"
-        rules={[{required: true, message: 'Please input your Id !'}]}
+        rules={[{required: true, message: t('pleaseInputId')}]}
       >
         <Input/>
       </Form.Item>
       <Form.Item
-        label="Name"
+        label={t('name')}
         name="name"
-        rules={[{required: true, message: 'Please input your name!'}]}
+        rules={[{required: true, message: t('pleaseInputName')}]}
       >
         <Input/>
       </Form.Item>
       <Form.Item
-        label="Phone"
+        label={t('phone')}
         name="phone"
-        rules={[{required: true, message: 'Please input your phone!'}]}
+        rules={[{required: true, message: t('pleaseInputPhone')}]}
       >
         <Input/>
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
-          Submit
+          {t('submit')}
         </Button>
       </Form.Item>
     </Form>
@@ -108,7 +101,7 @@ export default function CustomersPage() {
 
 
   return (
-    <GeneralView buttonAddLabel={'Add Client'}
+    <GeneralView buttonAddLabel={t('addClient')}
                  tableColumns={columns}
                  tableData={data && data}
                  openModal={openModal}

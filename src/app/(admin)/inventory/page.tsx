@@ -8,39 +8,41 @@ import {createCompany, deleteCompany, getCompanies, updateCompany} from "@/api/C
 import {createProduct, deleteProduct, getProducts} from "@/api/ProductAPI";
 import useAuthUser from "@/app/hooks/useAuthUser";
 import {getCategories} from "@/api/CategoryAPI";
+import {useTranslations} from "next-intl";
 
 export default function InventoryPage() {
 
   const [openModal, setOpenModal] = useState(false);
+  const t = useTranslations();
   const columns = [
     {
-      title: 'Code',
+      title: t('code'),
       dataIndex: 'code',
       key: 'code',
     },
     {
-      title: 'Name',
+      title: t('name'),
       dataIndex: 'name',
       key: 'name'
     },
     {
-      title: 'Characteristics',
+      title: t('characteristics'),
       dataIndex: 'characteristics',
       key: 'characteristics',
     },
     {
-      title: 'Categories',
+      title: t('categories'),
       key: 'categories',
       render: (text: any, record: any) => (
         <>
-          {record.categories.map((category:any) => {
+          {record.categories.map((category: any) => {
             return <Tag key={category.id} color={'blue'}>{category.name}</Tag>
           })}
         </>
       )
     },
     {
-      title: 'Price',
+      title: t('price'),
       dataIndex: 'price',
       key: 'price',
       render: (text: any, record: any) => (
@@ -48,29 +50,32 @@ export default function InventoryPage() {
       )
     },
     {
-      title: 'currency',
+      title: t('currency'),
       dataIndex: 'currency',
       key: 'currency',
     },
     {
-      title: 'stock',
+      title: t('stock'),
       dataIndex: 'stock',
       key: 'stock',
     },
     {
-      title: 'Company',
+      title: t('company'),
       key: 'company',
       render: (text: any, record: any) => (
         <Tag color={'green'}>{record.company.name}</Tag>
       )
     },
     {
-      title: 'Action',
+      title: t('action'),
       key: 'action',
       render: (text: any, record: any) => (
         <>
-          <Button icon={<DeleteFilled/>} onClick={() => removeProduct(record)} type="primary" danger>Delete</Button>
-        </>
+          {
+            user && user.isAdmin &&
+              <Button icon={<DeleteFilled/>} onClick={() => removeProduct(record)} type="primary"
+                      danger>{t('delete')}</Button>
+          }</>
       )
     },
   ];
@@ -88,7 +93,7 @@ export default function InventoryPage() {
 
   const {mutate: createNewProduct} = useMutation({
     mutationKey: ['createNewProduct'],
-    mutationFn: (product:any) => createProduct(user && user.accessToken, product),
+    mutationFn: (product: any) => createProduct(user && user.accessToken, product),
     onSuccess: () => {
       refetch()
     }
@@ -96,7 +101,7 @@ export default function InventoryPage() {
 
   const {mutate: deleteProd} = useMutation({
     mutationKey: ['deleteProductMutation'],
-    mutationFn: (productId:number) => deleteProduct(user && user.accessToken,productId),
+    mutationFn: (productId: number) => deleteProduct(user && user.accessToken, productId),
     onSuccess: () => {
       refetch()
     }
@@ -119,7 +124,6 @@ export default function InventoryPage() {
   });
 
 
-
   const onFinish = (values: any) => {
     createNewProduct(values)
     formInstance.resetFields()
@@ -129,66 +133,67 @@ export default function InventoryPage() {
   const form: React.ReactNode = (
     <Form onFinish={onFinish} form={formInstance}>
       <Form.Item
-        label="code"
+        label={t('code')}
         name="code"
-        rules={[{required: true, message: 'Please input the code!'}]}
+        rules={[{required: true, message: t('pleaseInputCode')}]}
       >
         <Input disabled={isEdit}/>
       </Form.Item>
       <Form.Item
-        label="Name"
+        label={t('name')}
         name="name"
-        rules={[{required: true, message: 'Please input the name!'}]}
+        rules={[{required: true, message: t('pleaseInputName')}]}
       >
         <Input/>
       </Form.Item>
       <Form.Item
-        label="Characteristics"
+        label={t('characteristics')}
         name="characteristics"
-        rules={[{required: true, message: 'Please input the characteristics!'}]}
+        rules={[{required: true, message: t('pleaseInputCharacteristics')}]}
       >
         <Input/>
       </Form.Item>
       <Form.Item
-        label="Price"
+        label={t('price')}
         name="price"
-        rules={[{required: true, message: 'Please input the price!'}]}
+        rules={[{required: true, message: t('pleaseInputPrice')}]}
       >
         <Input type={'number'}/>
       </Form.Item>
       <Form.Item
-        label="Currency"
+        label={t('currency')}
         name="currency"
-        rules={[{required: true, message: 'Please input the currency!'}]}
+        rules={[{required: true, message: t('pleaseInputCurrency')}]}
       >
         <Input/>
       </Form.Item>
       <Form.Item
-        label="Stock"
+        label={t('stock')}
         name="stock"
-        rules={[{required: true, message: 'Please input the stock!'}]}
+        rules={[{required: true, message: t('pleaseInputStock')}]}
       >
         <Input type={'number'}/>
       </Form.Item>
       <Form.Item
-        label="Company"
+        label={t('company')}
         name="companyId"
-        rules={[{required: true, message: 'Please input the company!'}]}
+        rules={[{required: true, message: t('pleaseInputCompany')}]}
       >
 
-        <Select onChange={() => {}}>
-          {companies && companies.map((company:any) => {
+        <Select onChange={() => {
+        }}>
+          {companies && companies.map((company: any) => {
             return (<Select.Option key={company.NIT} value={company.NIT}>{company.name}</Select.Option>)
           })}
         </Select>
       </Form.Item>
       <Form.Item
-        label="Categories "
-        rules={[{required: true, message: 'Please input the categories !'}]}
+        label={t('categories')}
+        rules={[{required: true, message: t('pleaseInputCategories')}]}
         name="categories"
       >
-        <Select mode="tags" style={{ width: '100%' }} placeholder="Tags Mode">
-          {categories && categories.categories.map((category:any) => {
+        <Select mode="tags" style={{width: '100%'}} placeholder="Tags Mode">
+          {categories && categories.categories.map((category: any) => {
             return (<Select.Option key={category.id} value={category.id}>{category.name}</Select.Option>)
           })}
         </Select>
@@ -196,7 +201,7 @@ export default function InventoryPage() {
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
-          Submit
+          {t('submit')}
         </Button>
       </Form.Item>
     </Form>
@@ -204,7 +209,7 @@ export default function InventoryPage() {
 
 
   return (
-    <GeneralView buttonAddLabel={'Add product'}
+    <GeneralView buttonAddLabel={t('addProduct')}
                  tableColumns={columns}
                  tableData={data && data || []}
                  openModal={openModal}
@@ -213,5 +218,5 @@ export default function InventoryPage() {
                  onAdd={() => setOpenModal(true)}
                  form={form}
     />
-    )
+  )
 }

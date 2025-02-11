@@ -15,6 +15,7 @@ interface GeneralViewProps {
   pagination?: any;
   setPagination?: any;
   isLoading?: boolean;
+  modalTitle?: string;
 }
 
 export default function GeneralView(
@@ -30,6 +31,7 @@ export default function GeneralView(
     pagination,
     setPagination,
     isLoading,
+    modalTitle
   }: GeneralViewProps
 ) {
 
@@ -49,7 +51,7 @@ export default function GeneralView(
       </section>
       <Modal
         open={openModal}
-        title="Basic Modal"
+        title={modalTitle ?? buttonAddLabel}
         onCancel={() => onCancel()}
         destroyOnClose={true}
         footer={null}>

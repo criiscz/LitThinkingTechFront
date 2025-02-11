@@ -3,32 +3,24 @@ import {Button, Form, Input, notification} from "antd";
 import {DeleteFilled, EditFilled} from "@ant-design/icons";
 import {useState} from "react";
 import {useMutation, useQuery} from "@tanstack/react-query";
-import {getClients} from "@/api/ClientAPI";
 import GeneralView from "@/app/(admin)/components/GeneralView";
 import {createCategory, getCategories} from "@/api/CategoryAPI";
 import useAuthUser from "@/app/hooks/useAuthUser";
+import {useTranslations} from "next-intl";
 
 export default function CategoriesPage() {
+  const t = useTranslations();
+
   const columns = [
     {
-      title: 'Category ID',
+      title: t('categoryId'),
       dataIndex: 'id',
       key: 'customerID',
     },
     {
-      title: 'Name',
+      title: t('name'),
       dataIndex: 'name',
       key: 'name',
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (text: any, record: any) => (
-        <>
-          <Button icon={<EditFilled/>} type="primary" onClick={() => setOpenModal(true)}>Edit</Button>
-          <Button icon={<DeleteFilled/>} type="primary" danger>Delete</Button>
-        </>
-      )
     },
   ];
 
@@ -57,8 +49,8 @@ export default function CategoriesPage() {
         return;
       }
       notification.success({
-        message: 'Success',
-        description: 'Category created successfully',
+        message: t('success'),
+        description: t('categoryCreated'),
       });
       refetch();
       setOpenModal(false);
@@ -69,15 +61,15 @@ export default function CategoriesPage() {
   const form: React.ReactNode = (
     <Form onFinish={handleSubmit} form={formInstance}>
       <Form.Item
-        label="Name"
+        label={t('name')}
         name="name"
-        rules={[{required: true, message: 'Please input your name!'}]}
+        rules={[{required: true, message: t('pleaseInputName')}]}
       >
         <Input/>
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
-          Submit
+          {t('submit')}
         </Button>
       </Form.Item>
     </Form>
@@ -85,7 +77,8 @@ export default function CategoriesPage() {
 
 
   return (
-    <GeneralView buttonAddLabel={'Add Category'}
+    <GeneralView buttonAddLabel={t('addCategory')}
+                 modalTitle={t('category')}
                  tableColumns={columns}
                  tableData={data && data.categories}
                  openModal={openModal}
