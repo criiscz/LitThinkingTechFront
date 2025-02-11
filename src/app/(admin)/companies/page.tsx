@@ -126,15 +126,15 @@ export default function DashboardPage() {
         <Input/>
       </Form.Item>
       <Form.Item
-        label="Address"
-        name={t('address')}
+        label={t('address')}
+        name="address"
         rules={[{required: true, message: t('pleaseInputAddress')}]}
       >
         <Input/>
       </Form.Item>
       <Form.Item
-        label="Phone"
-        name={t('phone')}
+        label={t('phone')}
+        name="phone"
         rules={[{required: true, message: t('pleaseInputPhone')}]}
       >
         <Input/>
