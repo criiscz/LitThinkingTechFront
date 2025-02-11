@@ -1,14 +1,17 @@
 'use client'
 import {Button, Form, Input, Select, Tag} from "antd";
-import {DeleteFilled, EditFilled} from "@ant-design/icons";
+import {DeleteFilled} from "@ant-design/icons";
 import {useState} from "react";
 import GeneralView from "@/app/(admin)/components/GeneralView";
 import {useMutation, useQuery} from "@tanstack/react-query";
-import {createCompany, deleteCompany, getCompanies, updateCompany} from "@/api/CompanyAPI";
+import {getCompanies} from "@/api/CompanyAPI";
 import {createProduct, deleteProduct, getProducts} from "@/api/ProductAPI";
 import useAuthUser from "@/app/hooks/useAuthUser";
 import {getCategories} from "@/api/CategoryAPI";
 import {useTranslations} from "next-intl";
+import {PDFDownloadLink} from "@react-pdf/renderer";
+import InventoryPDF from "@/app/helpers/InventoryPDF";
+import {RiFilePdf2Line, RiFilePdfFill} from "@remixicon/react";
 
 export default function InventoryPage() {
 
@@ -207,16 +210,31 @@ export default function InventoryPage() {
     </Form>
   )
 
+  const generatePDF = () => {
+
+  }
+  const [pdf, setPdf] = useState<any>(null)
+
 
   return (
-    <GeneralView buttonAddLabel={t('addProduct')}
-                 tableColumns={columns}
-                 tableData={data && data || []}
-                 openModal={openModal}
-                 onOk={() => setOpenModal(false)}
-                 onCancel={() => setOpenModal(false)}
-                 onAdd={() => setOpenModal(true)}
-                 form={form}
+    <>
+      <PDFDownloadLink
+        document={
+        <InventoryPDF products={data && data || []}/>
+        }
+        fileName="inventory.pdf"
+      >
+        <Button color="default" variant={'solid'} icon={<RiFilePdf2Line/>} onClick={() => generatePDF()}>{t("generatePDF")}</Button>
+      </PDFDownloadLink>
+      <GeneralView buttonAddLabel={t("addProduct")}
+                   tableColumns={columns}
+                   tableData={data && data || []}
+                   openModal={openModal}
+                   onOk={() => setOpenModal(false)}
+                   onCancel={() => setOpenModal(false)}
+                   onAdd={() => setOpenModal(true)}
+                   form={form}
     />
+    </>
   )
 }

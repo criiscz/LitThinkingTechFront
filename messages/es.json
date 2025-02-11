@@ -69,5 +69,6 @@
   "users": "Usuarios",
   "orders": "Pedidos",
   "inventory": "Inventario",
-  "signOut": "Cerrar Sesión"
+  "signOut": "Cerrar Sesión",
+  "generatePDF": "Generar PDF"
 }

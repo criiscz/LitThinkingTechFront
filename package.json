@@ -11,6 +11,9 @@
   "dependencies": {
     "@aws-amplify/adapter-nextjs": "^1.4.3",
     "@aws-sdk/client-cognito-identity-provider": "^3.744.0",
+    "@aws-sdk/client-ses": "^3.744.0",
+    "@aws-sdk/credential-provider-node": "^3.744.0",
+    "@react-pdf/renderer": "^4.2.1",
     "@remixicon/react": "^4.6.0",
     "@tanstack/react-query": "^5.66.0",
     "antd": "^5.23.4",
@@ -19,11 +22,13 @@
     "next": "14.2.23",
     "next-auth": "^4.24.11",
     "next-intl": "^3.26.3",
+    "nodemailer": "^6.10.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/nodemailer": "^6.4.17",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "postcss": "^8",

@@ -69,5 +69,6 @@
   "users": "Users",
   "orders": "Orders",
   "inventory": "Inventory",
-  "signOut": "Sign Out"
+  "signOut": "Sign Out",
+  "generatePDF": "Generate PDF"
 }
