@@ -1,10 +1,7 @@
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const getProducts = async (
-  token: string
-) => {
-  const response = await fetch(`${API_URL}/products/all`, {
+export const getOrders = async (token:string) => {
+  const response = await fetch(`${API_URL}/orders/all`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -15,8 +12,8 @@ export const getProducts = async (
   return response.json();
 }
 
-export const getProduct = async (token: string, productId: number) => {
-  const response = await fetch(`${API_URL}/products/${productId}`, {
+export const getOrder = async (token:string, orderId: number) => {
+  const response = await fetch(`${API_URL}/orders/${orderId}`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -27,34 +24,35 @@ export const getProduct = async (token: string, productId: number) => {
   return response.json();
 }
 
-export const createProduct = async (token:string, product: any) => {
-  const response = await fetch(`${API_URL}/products/`, {
+export const createOrder = async (token: string, order: any) => {
+  console.log('order', order);
+  const response = await fetch(`${API_URL}/orders/`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(product) // categories is not implemented yet
+    body: JSON.stringify(order)
   });
   return response.json();
 }
 
-export const updateProduct = async (token:string, product: any, productId: string) => {
-  const response = await fetch(`${API_URL}/products/${productId}`, {
+export const updateOrder = async (order: any, orderId: string) => {
+  const response = await fetch(`${API_URL}/orders/${orderId}`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+
     },
-    body: JSON.stringify(product)
+    body: JSON.stringify(order)
   });
   return response.json();
 }
 
-export const deleteProduct = async (token:string, productId: number) =>
-  fetch(`${API_URL}/products/${productId}`, {
+export const deleteOrder = async (token:string, orderId: number) =>
+  fetch(`${API_URL}/orders/${orderId}`, {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
@@ -62,5 +60,3 @@ export const deleteProduct = async (token:string, productId: number) =>
       Authorization: `Bearer ${token}`,
     },
   });
-
-

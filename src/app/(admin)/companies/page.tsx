@@ -6,10 +6,12 @@ import {useEffect, useState} from "react";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import GeneralView from "@/app/(admin)/components/GeneralView";
 import {createCompany, deleteCompany, getCompanies, updateCompany} from "@/api/CompanyAPI";
+import useAuthUser from "@/app/hooks/useAuthUser";
 
 export default function DashboardPage() {
   const t = useTranslations('general');
 
+  const user = useAuthUser();
 
   const [openModal, setOpenModal] = useState(false);
   const columns = [
@@ -50,14 +52,14 @@ export default function DashboardPage() {
 
   const {data, refetch, isLoading, isError, error} = useQuery({
     queryKey: ['companies', pagination.current, pagination.pageSize],
-    queryFn: () => getCompanies(pagination.current, pagination.pageSize)
+    queryFn: () => getCompanies(user && user.accessToken)
   })
 
   const [formInstance] = Form.useForm()
 
   const {mutate: createNewCompany} = useMutation({
     mutationKey: ['createCompany'],
-    mutationFn: (company:any) => createCompany(company),
+    mutationFn: (company:any) => createCompany(user && user.accessToken, company),
     onSuccess: () => {
       refetch()
     }
@@ -65,7 +67,7 @@ export default function DashboardPage() {
 
   const {mutate: updateComp} = useMutation({
     mutationKey: ['updateCompanyMutation'],
-    mutationFn: ({company, companyId}:{company: any, companyId: string}) => updateCompany(company, companyId),
+    mutationFn: ({company, companyId}:{company: any, companyId: string}) => updateCompany(user && user.accessToken, company, companyId),
     onSuccess: () => {
       refetch()
     }
@@ -73,7 +75,7 @@ export default function DashboardPage() {
 
   const {mutate: deleteComp} = useMutation({
     mutationKey: ['deleteCompanyMutation'],
-    mutationFn: (companyId:number) => deleteCompany(companyId),
+    mutationFn: (companyId:number) => deleteCompany(user && user.accessToken, companyId),
     onSuccess: () => {
       refetch()
     }
@@ -93,13 +95,11 @@ export default function DashboardPage() {
     formInstance.resetFields()
     setOpenModal(false)
   }
-
   const editCompany = (record: any) => {
     setIsEdit(true)
     formInstance.setFieldsValue(record)
     setOpenModal(true)
   }
-
   const removeCompany = (record: any) => {
     deleteComp(record.NIT)
   }
@@ -147,7 +147,7 @@ export default function DashboardPage() {
     <GeneralView
       buttonAddLabel={'Add Company'}
       tableColumns={columns}
-      tableData={data && data.data}
+      tableData={data && data}
       pagination={pagination}
       setPagination={setPagination}
       openModal={openModal}

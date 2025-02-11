@@ -1,32 +1,31 @@
-import { redirect } from "next/navigation";
+import {redirect, useRouter} from "next/navigation";
 import {
   signIn,
   signOut,
 } from "aws-amplify/auth";
+import {getErrorMessage} from "@/utils/get-error-message";
 
 export async function handleSignIn(
   email: string,
   password: string
 ) {
-  const redirectLink = "/companies";
+
+  const redirectLink = "/dashboard";
   try {
     const { isSignedIn, nextStep } = await signIn({
       username: email,
       password: password,
     })
-    // TODO: handle nextStep to confirm sign in and add MFA
   } catch (error) {
-    console.log("error signing in", error);
-    redirect("/login");
+    return getErrorMessage(error);
   }
-  redirect(redirectLink);
 }
 
 export async function handleSignOut() {
   try {
     await signOut();
   } catch (error) {
-    console.log("error signing out: ", error);
+    return getErrorMessage(error);
   }
-  redirect("/login");
 }
+

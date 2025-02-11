@@ -2,59 +2,63 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const getCompanies = async (
-  page: number,
-  size: number,
+  token: string
 ) => {
-  const response = await fetch(`${API_URL}/company/?page=${page-1}&size=${size}`, {
+  const response = await fetch(`${API_URL}/company/all`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
   });
   return response.json();
 }
 
-export const getCompany = async (companyId: number) => {
+export const getCompany = async (token:string, companyId: number) => {
   const response = await fetch(`${API_URL}/company/${companyId}`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
   });
   return response.json();
 }
 
-export const createCompany = async (company: any) => {
+export const createCompany = async (token:string, company: any) => {
   const response = await fetch(`${API_URL}/company/`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(company)
   });
   return response.json();
 }
 
-export const updateCompany = async (company: any, companyId: string) => {
+export const updateCompany = async (token:string, company: any, companyId: string) => {
   const response = await fetch(`${API_URL}/company/${companyId}`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(company)
   });
   return response.json();
 }
 
-export const deleteCompany = async (companyId: number) =>
+export const deleteCompany = async (token:string, companyId: number) =>
   fetch(`${API_URL}/company/${companyId}`, {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
   });

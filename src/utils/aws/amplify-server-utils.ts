@@ -9,29 +9,30 @@ export const { runWithAmplifyServerContext } = createServerRunner({
 });
 
 
-// STACK OVERFLOW
-// export async function authenticatedUser(context: NextServer.Context) {
-//   return await runWithAmplifyServerContext({
-//     nextServerContext: context,
-//     // operation: async (contextSpec) => {
-//     //   try {
-//     //     // const session = await fetchAuthSession(contextSpec);
-//     //     // if (!session.tokens) {
-//     //     //   return;
-//     //     // }
-//     //     // const user = {
-//     //     //   ...(await getCurrentUser(contextSpec)),
-//     //     //   isAdmin: false,
-//     //     // };
-//     //     // const groups = session.tokens.accessToken.payload["cognito:groups"];
-//     //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//     //     // @ts-expect-error
-//     //     // user.isAdmin = Boolean(groups && groups.includes("Admins"));
-//     //
-//     //     return user;
-//     //   } catch (error) {
-//     //     console.log(error);
-//     //   }
-//     // },
-//   });
-// }
+export async function authenticatedUser(context: NextServer.Context) {
+  return await runWithAmplifyServerContext({
+    nextServerContext: context,
+    operation: async (contextSpec) => {
+      try {
+        const session = await fetchAuthSession(contextSpec);
+        if (!session.tokens) {
+          return;
+        }
+        const user = {
+          ...(await getCurrentUser(contextSpec)),
+          isAdmin: false,
+          accessToken: "",
+        };
+        const groups = session.tokens.accessToken.payload["cognito:groups"];
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        user.isAdmin = Boolean(groups && groups.includes("ADMIN"));
+        user.accessToken = session.tokens.accessToken.toString();
+
+        return user;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
+}

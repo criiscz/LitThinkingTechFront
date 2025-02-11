@@ -1,6 +1,7 @@
 import Search from "antd/es/input/Search";
 import {Button, Form, Input, Modal, Table} from "antd";
 import {PlusCircleFilled} from "@ant-design/icons";
+import useAuthUser from "@/app/hooks/useAuthUser";
 
 interface GeneralViewProps {
   buttonAddLabel: string;
@@ -13,6 +14,7 @@ interface GeneralViewProps {
   form: React.ReactNode;
   pagination?: any;
   setPagination?: any;
+  isLoading?: boolean;
 }
 
 export default function GeneralView(
@@ -26,20 +28,23 @@ export default function GeneralView(
     form,
     onAdd,
     pagination,
-    setPagination
+    setPagination,
+    isLoading,
   }: GeneralViewProps
 ) {
+
+  const user = useAuthUser();
+
   return (
     <div className={'flex flex-col gap-10 mt-5'}>
       <div className={'flex flex-row w-full content-between gap-3'}>
-        <Search placeholder="input search text" onSearch={value => console.log(value)} enterButton/>
-        <Button icon={<PlusCircleFilled/>} type="primary" onClick={() => onAdd()}>{buttonAddLabel}</Button>
+        { user && user.isAdmin && <Button icon={<PlusCircleFilled/>} type="primary" onClick={() => onAdd()}>{buttonAddLabel}</Button> || null }
       </div>
       <section>
-        <Table columns={tableColumns} dataSource={tableData} pagination={{
+        <Table columns={tableColumns} loading={isLoading} dataSource={tableData} pagination={{
           ...pagination,
-          showSizeChanger: true,
-          onChange: (page: number, pageSize: number) => setPagination({current: page - 1, pageSize: pageSize})
+          showSizeChanger: false,
+          onChange: (page: number, pageSize: number) => setPagination({current: page, pageSize: pageSize})
         }}/>
       </section>
       <Modal

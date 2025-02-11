@@ -5,7 +5,7 @@ import '@/utils/aws/Amplify';
 import {NextIntlClientProvider} from 'next-intl';
 import {getLocale, getMessages} from 'next-intl/server';
 import React from "react";
-import React19Compatability from "@/app/components/React19Compatability";
+import AuthenticatedLayout from "@/app/components/AuthenticatedLayout";
 import ReactQueryProvider from "@/app/components/ReactQueryProvider";
 import {getServerSession} from "next-auth";
 import ConfigureAmplifyClientSide from "@/utils/aws/Amplify";
@@ -30,7 +30,6 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body>
-      <React19Compatability/>
       <ConfigureAmplifyClientSide/>
       <ReactQueryProvider>
         <NextIntlClientProvider messages={messages}>
