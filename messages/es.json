@@ -70,5 +70,7 @@
   "orders": "Pedidos",
   "inventory": "Inventario",
   "signOut": "Cerrar Sesión",
-  "generatePDF": "Generar PDF"
+  "generatePDF": "Generar PDF",
+  "sendEmail": "Enviar Correo Electrónico",
+  "emailSent": "El correo se ha enviado a cri****@gmail.com debido a limitaciones de envio a correos personalizados en el servicio SES de AWS"
 }

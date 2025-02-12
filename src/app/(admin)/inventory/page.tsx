@@ -1,5 +1,5 @@
 'use client'
-import {Button, Form, Input, Select, Tag} from "antd";
+import {Button, Form, Input, notification, Select, Tag} from "antd";
 import {DeleteFilled} from "@ant-design/icons";
 import {useEffect, useState} from "react";
 import GeneralView from "@/app/(admin)/components/GeneralView";
@@ -220,6 +220,7 @@ export default function InventoryPage() {
     const form = new FormData();
     form.append("blob", pdf, "inventory.pdf");
     await sendNewEmail('criiscz08@gmail.com', [form]);
+    notification.success({message: t("emailSent")});
   }
 
 

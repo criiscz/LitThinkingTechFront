@@ -70,5 +70,7 @@
   "orders": "Orders",
   "inventory": "Inventory",
   "signOut": "Sign Out",
-  "generatePDF": "Generate PDF"
+  "generatePDF": "Generate PDF",
+  "sendEmail": "Send Email",
+  "emailSent": "The email has been sent to cri****@gmail.com due to limitations on sending to custom emails in the AWS SES service"
 }
