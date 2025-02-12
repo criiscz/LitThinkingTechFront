@@ -1,7 +1,7 @@
 'use client'
 import {Button, Form, Input, Select, Tag} from "antd";
 import {DeleteFilled} from "@ant-design/icons";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import GeneralView from "@/app/(admin)/components/GeneralView";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import {getCompanies} from "@/api/CompanyAPI";
@@ -9,9 +9,10 @@ import {createProduct, deleteProduct, getProducts} from "@/api/ProductAPI";
 import useAuthUser from "@/app/hooks/useAuthUser";
 import {getCategories} from "@/api/CategoryAPI";
 import {useTranslations} from "next-intl";
-import {PDFDownloadLink} from "@react-pdf/renderer";
+import {BlobProvider, PDFDownloadLink} from "@react-pdf/renderer";
 import InventoryPDF from "@/app/helpers/InventoryPDF";
 import {RiFilePdf2Line, RiFilePdfFill} from "@remixicon/react";
+import {sendNewEmail} from "@/app/services/EmailService";
 
 export default function InventoryPage() {
 
@@ -215,9 +216,36 @@ export default function InventoryPage() {
   }
   const [pdf, setPdf] = useState<any>(null)
 
+  const sendaEmail = async () => {
+    const form = new FormData();
+    form.append("blob", pdf, "inventory.pdf");
+    await sendNewEmail('criiscz08@gmail.com', [form]);
+  }
+
 
   return (
     <>
+      <Button
+        color="primary"
+        variant={'solid'}
+        icon={<RiFilePdfFill/>}
+        onClick={() => sendaEmail()}
+      >{t("sendEmail")}</Button>
+
+      <BlobProvider document={<InventoryPDF products={data && data || []}/>}>
+        {({
+          blob,
+        }) => {
+          if (blob) {
+            setPdf(blob);
+            return;
+          }
+          return (
+            <></>
+          )
+        }}
+      </BlobProvider>
+
       <PDFDownloadLink
         document={
         <InventoryPDF products={data && data || []}/>
